@@ -1,0 +1,5 @@
+demo.c:16:13:delay_loop	24	static
+demo.c:23:13:init_systick	4	static
+demo.c:38:13:delay_systick	16	static
+demo.c:50:13:demo_of_UART_print	56	static
+demo.c:63:6:run_demo	16	static

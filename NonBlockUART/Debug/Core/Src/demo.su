@@ -1,0 +1,4 @@
+demo.c:19:13:delay_loop	24	static
+demo.c:26:13:init_systick	4	static
+demo.c:41:13:delay_systick	4	static
+demo.c:51:6:run_demo	16	static

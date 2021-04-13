@@ -1,0 +1,8 @@
+LED.c:16:6:GPIO_Output_Init	16	static
+LED.c:47:6:LED_Init	8	static
+LED.c:56:6:LED_r_On	4	static
+LED.c:64:6:LED_r_Off	4	static
+LED.c:72:6:LED_g_On	4	static
+LED.c:80:6:LED_g_Off	4	static
+LED.c:88:6:LED_Toggle_R	4	static
+LED.c:93:6:LED_Toggle_G	4	static

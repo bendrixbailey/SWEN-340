@@ -1,0 +1,4 @@
+functions_to_test.c:11:10:example_1	16	static
+functions_to_test.c:17:7:example_2	24	static
+functions_to_test.c:27:9:test_for_bit_value	16	static
+functions_to_test.c:43:6:swap_case_in_string	48	static

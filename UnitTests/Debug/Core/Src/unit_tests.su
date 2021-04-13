@@ -1,0 +1,3 @@
+unit_tests.c:18:6:st_printf	112	static
+unit_tests.c:30:5:assert	132	static
+unit_tests.c:54:5:test	64	static

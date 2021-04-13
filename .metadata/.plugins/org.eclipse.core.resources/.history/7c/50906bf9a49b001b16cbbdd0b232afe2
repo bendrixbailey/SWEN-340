@@ -1,0 +1,20 @@
+#ifndef __LED__API_H
+#define __LED__API_H
+
+
+void init_systick(void);
+void delay_systick(void);
+void init_all(void);
+
+void RON(void);
+void ROFF(void);
+void RFLASH(void);
+
+void GON(void);
+void GOFF(void);
+void GFLASH(void);
+
+void FLASHOFF(void);
+void SysTickHandler(void);
+
+void UpdateApiCheck(void);

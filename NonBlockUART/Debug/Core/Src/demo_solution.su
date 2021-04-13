@@ -1,0 +1,4 @@
+demo_solution.c:17:13:demo_of_printf_scanf	24	static
+demo_solution.c:36:13:delay_loop	24	static
+demo_solution.c:43:13:init_systick	4	static
+demo_solution.c:51:13:delay_systick	16	static
