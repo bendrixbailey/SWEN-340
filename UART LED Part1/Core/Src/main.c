@@ -1,12 +1,11 @@
-// main.c with demo
-// Updated and refactored Larry Kiser copyright 2021
+// main.c for UART LED project.
+// author: bendrix bailey
 
 
 // include project specific header files
 #include "SysClock.h"
 #include "LED.h"
 #include "UART.h"
-#include "demo.h"
 #include "LED_API.h"
 
 	
@@ -17,6 +16,6 @@ int main(void){
 	UART2_Init();
 	
 	// application run function
-	UpdateApiCheck();
+	UpdateApiCheck();	//calls my fancy function every cycle
 }
 

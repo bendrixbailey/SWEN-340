@@ -6,8 +6,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/SysClock.h \
  ../Drivers/CMSIS/Include/cmsis_gcc.h \
  ../Drivers/CMSIS/Include/mpu_armv7.h \
  ../Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h \
- ../Core/Inc/LED.h ../Core/Inc/UART.h ../Core/Inc/demo.h \
- ../Core/Inc/LED_API.h
+ ../Core/Inc/LED.h ../Core/Inc/UART.h ../Core/Inc/LED_API.h
 
 ../Core/Inc/SysClock.h:
 
@@ -28,7 +27,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/SysClock.h \
 ../Core/Inc/LED.h:
 
 ../Core/Inc/UART.h:
-
-../Core/Inc/demo.h:
 
 ../Core/Inc/LED_API.h:

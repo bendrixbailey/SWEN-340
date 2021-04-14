@@ -5100,3 +5100,11 @@
 2021-04-13 17:00:53,672 [INFO] ApiDb:267 - User favorites MCUs=[STM32L476RGTx]
 2021-04-13 17:00:53,677 [INFO] ApiDb:263 - Save user favorites file C:\Users\bendr/.stm32cubeide/favorites.boards.txt: 1 item(s)
 2021-04-13 17:00:53,678 [INFO] ApiDb:267 - User favorites Boards=[NUCLEO-L476RG]
+2021-04-14 09:12:09,390 [INFO] Activator:170 - 
+
+
+2021-04-14 09:12:09,392 [INFO] Activator:171 - !SESSION log4j initialized
+2021-04-14 12:13:00,003 [INFO] Activator:170 - 
+
+
+2021-04-14 12:13:00,004 [INFO] Activator:171 - !SESSION log4j initialized

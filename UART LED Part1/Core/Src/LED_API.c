@@ -1,4 +1,5 @@
 //Main file for API functions, also contains main API loop
+//Author: Bendrix Bailey
 
 #include <string.h>
 #include <stdio.h>
@@ -9,9 +10,12 @@
 #include "UART.h"
 
 
-static uint8_t one_second_elapsed;
+static uint32_t one_ms_elapsed;
 static uint8_t green_flash;
 static uint8_t red_flash;
+
+//this controls the green/red switching.
+static uint8_t alternator;
 
 static void init_systick()
 {
@@ -52,96 +56,109 @@ static void print_intro(){
 static void init_all(){
 	//init function that should init all necessary stuff.
 	LED_Init();
-	init_systick();
+
+	//below code delays the loop so the print statements
+	//dont overlap from another running version of this code
+	for(int i = 0; i < 1000; i++){
+		delay_systick();
+	}
+
 }
 
 static void process_input(char *buffer){
 	//This function processes the input buffer, if its any of the commands, it calls the respective
 	//function, otherwise it prints "invalid command"
 	if(strcmp(buffer, "RON") == 0){
-		LED_r_On();
+		LED_r_On(); 				//turns red LED on
 	}else if (strcmp(buffer, "ROFF") == 0){
-		LED_r_Off();
+		LED_r_Off(); 				//turns red LED off
 	}else if (strcmp(buffer, "GON") == 0){
-		LED_g_On();
+		LED_g_On(); 				//turns green LED on
 	}else if (strcmp(buffer, "GOFF") == 0){
-		LED_g_Off();
+		LED_g_Off();				//turns green LED off
 	}else if (strcmp(buffer, "RFLASH") == 0){
-		red_flash = 1;
+		//this is the only way I could get the leds to alternate.
+		//It doesnt EXACTLY look perfect, but you can barely
+		//tell that I manipulate both LEDS here
+		red_flash = 1;				//sets red flashing to true
+		if(green_flash == 1){		//if green is also flashing,
+			LED_g_On();				//turn green on
+			LED_r_Off();			//turn red off
+		}
 	}else if (strcmp(buffer, "GFLASH") == 0){
-		green_flash = 1;
+		//This does the opposite as above
+		green_flash = 1;			//sets green flashing to true
+		if(red_flash == 1){			//if red flashing
+			LED_g_Off();			//turn green off
+			LED_r_On();				///turn red on
+		}
 	}else if (strcmp(buffer, "FLASHOFF") == 0){
-		red_flash = 0;
-		green_flash = 0;
-	}else{
+		red_flash = 0;				//set red flashing to false
+		green_flash = 0;			//set green flashing to false
+		LED_r_Off();				//turn off red led
+		LED_g_Off();				//turn off green led
+	}else{							//else, invalid command, just print invalid command
 		char *error1 = "\r\nInvalid Command!\r\n";
 		USART_Write(USART2, (uint8_t *)error1, strlen(error1));
 	}
 }
 
 static void toggle_flashing(){
-	if(green_flash == 1){
-		LED_Toggle_G();
+	//This function is called every second, toggle does nothing if
+	//one or both LEDS are off.
+	if(green_flash == 1){	//if green flashing is true
+		LED_Toggle_G();		//toggle green led (just flips state)
 	}
-	if(red_flash == 1){
-		LED_Toggle_R();
+	if(red_flash == 1){		//if red flashing is true
+		LED_Toggle_R();		//toggle red LED (just flips state)
 	}
 }
-
 
 void SysTick_Handler()
 {
-	static uint32_t counter;
-	for(counter = 0; counter < 1000; counter ++){
-		;
-	}
-	one_second_elapsed = 1;
-	counter = 0;
+	one_ms_elapsed ++;		//increase ms counter by 1
 }
 
+void UpdateApiCheck(){
+	//Main program loop. Called every clock cycle of board
+	uint8_t entryBuffer[BUFFER_SIZE];		//Stores command buffer
+	uint8_t index = 0;						//index of command buffer
+	uint8_t r_char;							//character read in by USART_Read
+	uint8_t newline = '\n';					//newline character
 
-int UpdateApiCheck(){
-	uint8_t entryBuffer[BUFFER_SIZE];
-	uint8_t index = 0;
-	uint8_t r_char;
-
-	init_all();
-	print_intro();
+	uint32_t count_limit = 1000;			//this is the counter for a second passed
+	init_systick();							//inits systick, sets register values
+	alternator = 0;							//flips btw 1 and 0
+	init_all();								//calls all other init functions
+	print_intro();							//prints program info and command list
 
 	while(1){
-		r_char = USART_Read_Nonblocking(USART2); //get character from console
+		r_char = USART_Read_Nonblocking(USART2); 	//get character from console
 
-		if(r_char ){
-			if (r_char == '\r')
+		if(r_char ){								//if character is not 0
+			if (r_char == '\r')						//if character is "Enter"
 			{
-				entryBuffer[index] = '\0';
-				index = 0;
-				//check full buffer and compare to all possible functions
-				process_input((char *)entryBuffer);
-				USART_Write(USART2, (uint8_t *)'\n', 1);
-				//if none, print out 'invalid command'
+				entryBuffer[index] = '\0';			//add end of string char
+				index = 0;							//reset index
+				process_input((char *)entryBuffer);	//process buffer
+				USART_Write(USART2, &newline, 1);	//write newline
 			}
-			else if(index < BUFFER_SIZE){ //if index is less than buffer,
-				entryBuffer[index++] = r_char; //
+			else if(index < BUFFER_SIZE){ 			//if index is less than buffer,
+				entryBuffer[index++] = r_char; 		//add new char to buffer
 			}
-
-			if(r_char == 0x7f){
-				//backspace, overwrite character
-				index --;
-				USART_Write(USART2, entryBuffer, index);
+			if(r_char == 0x7f){						//if "Backspace" is entered
+				if(index >= 2){						//dont backspace if the line has no chars in it.
+					index = index - 2;				//backtrack to last char entered
+					entryBuffer[index] = '\0';		//reset char to end of string
+				}
 			}
 
-			USART_Write(USART2, &r_char, 1); //echo rchar to buffer
-			//if enter key, check for valid command
-			//if backspace, remove previous char from buffer, display result
-			//echo character, add to command buffer
-			//backspace is 0x7F
+			USART_Write(USART2, &r_char, 1); 		//echo rchar to buffer
 		}
-
-		if(one_second_elapsed)
-			//toggle_lines(); // flip led thats on to off, and vice versa
-			green_flash = 1;
-		one_second_elapsed = 0;
+		if(one_ms_elapsed >= count_limit){			//if one second has elapsed
+			toggle_flashing(); 						// flip led thats on to off, and vice versa
+			alternator = (alternator == 0) ? 1 : 0; //oooh fancy if else statement ;)
+			one_ms_elapsed = 0;						//reset ms counter
+		}
 	}
-
 }

@@ -1,0 +1,9 @@
+#ifndef __LED_API_H
+#define __LED_API_H
+
+#define BUFFERSIZE (10);
+
+//void SysTick_Handler(void);
+int UpdateApiCheck(void);
+
+#endif

@@ -1,10 +1,10 @@
-17:10:21 **** Incremental Build of configuration Debug for project UART LED Part1 ****
+12:14:35 **** Incremental Build of configuration Debug for project UART LED Part1 ****
 make -j8 all 
 arm-none-eabi-size   UART\ LED\ Part1.elf 
    text	   data	    bss	    dec	    hex	filename
-   3352	      8	   1576	   4936	   1348	UART LED Part1.elf
+   3584	      8	   1576	   5168	   1430	UART LED Part1.elf
 Finished building: default.size.stdout
  
 
-17:10:21 Build Finished. 0 errors, 0 warnings. (took 175ms)
+12:14:35 Build Finished. 0 errors, 0 warnings. (took 216ms)
 

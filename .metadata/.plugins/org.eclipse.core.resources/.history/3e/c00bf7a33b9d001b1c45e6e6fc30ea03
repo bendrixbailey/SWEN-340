@@ -1,0 +1,15 @@
+//#ifndef __LED_API_H
+//#define __LED_API_H
+
+#define BUFFERSIZE (10);
+
+void UpdateApiCheck(void);
+
+////#endif
+//It looks like the system clock is going too fast for the GDB server to work, so I switched to using an OpenOCD debug probe and now I can run the code through STM32cubeIDE.
+//
+//I cant even measure how fast the system clock on the board is going, and I can slow the LED to noticable flashing by changing the SysTick->LOAD to 32,000,000. Increasing the load past that does nothing, and Im still unable to slow the flashing down any more with SysTick_Handler().
+//
+//Im really not sure why the clock is running so fast, or why the LOAD value isnt having as large an effect on the board.
+//
+//The other SysTick register sets are working just fine.
